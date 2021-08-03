@@ -1,2 +1,2 @@
-# Chess_Program
+# Multiplayer Chess Program
  
