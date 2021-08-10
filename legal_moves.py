@@ -3,7 +3,6 @@ from constants import *
 
 def draw_legal_moves(WN, square, color, board, turn):
     # Using chess module to find legal moves based on chess.Board.legal_moves
-    c = (0, 230, 230)
     squares = []
 
     if colors.index(color) + 1 == turn:
@@ -20,11 +19,12 @@ def draw_legal_moves(WN, square, color, board, turn):
     for square in squares:
         try:
             x = DIF_BOARD + (files.index(square[0]) + 0.5) * square_width
-            y = (8 - ranks.index(square[1]) - 0.5) * square_height
-            pygame.draw.circle(WN, c, (x, y), ((square_width + square_height)/6))
+            y = (8 - ranks.index(square[1]) - 0.5) * square_height + timer_height
+            pygame.draw.circle(WN, CYAN, (x, y), ((square_width + square_height)/6))
             pygame.display.update()
 
         except:
             pass
 
     return squares
+
