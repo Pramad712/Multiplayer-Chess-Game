@@ -101,7 +101,7 @@ def move_castling(board_interpretation, original_square, resulting_square):
 
     return board_interpretation
 
-def move_en_passant(board_interpretation, pieces, original_square, resulting_square):
+def move_en_passant(board_interpretation, pieces, captured_pieces, original_square, resulting_square):
     # Find the captured piece
     file_n = files.index(original_square[0])
     rank_n = 7 - ranks.index(original_square[1])
@@ -117,12 +117,12 @@ def move_en_passant(board_interpretation, pieces, original_square, resulting_squ
     elif rank_n < moved_rank_n:
         piece_captured = board_interpretation[moved_rank_n - 1][moved_file_n]
 
-
-    # Delete Piece from list
+    # Delete Piece from pieces list, and add it to captured_pieces
     location = pieces.index(piece_captured)
     del pieces[location]
+    captured_pieces.append(piece_captured)
 
-    # Delete Piece from board interpretation
+    # Delete Piece
     location = numpy.where(board_interpretation == piece_captured)
     board_interpretation[location] = None
 
@@ -130,20 +130,3 @@ def move_en_passant(board_interpretation, pieces, original_square, resulting_squ
     piece = board_interpretation[rank_n][file_n]
     board_interpretation[rank_n][file_n] = None
     board_interpretation[moved_rank_n][moved_file_n] = piece
-
-def move_promotion(board_interpretation, pieces, original_square, resulting_square):
-    file_n = files.index(original_square[0])
-    rank_n = 7 - ranks.index(original_square[1])
-
-    moved_file_n = files.index(resulting_square[0])
-    moved_rank_n = 7 - ranks.index(resulting_square[1])
-    piece = board_interpretation[rank_n][file_n]
-    place_moved = board_interpretation[moved_rank_n][moved_file_n]
-
-    if place_moved != None:  # Capture
-        location = pieces.index(place_moved)
-        del pieces[location]
-
-    board_interpretation[rank_n][file_n] = None
-    board_interpretation[moved_rank_n][moved_file_n] = piece
-    promotion_menu(piece)
