@@ -7,7 +7,7 @@ Two Player Game
 
 • Pygame 2.0.1 for the main program
 
-• PyQt5 for the message box, and promotions, as pygame doesn't support multiple windows being open at the same time
+• PyQt5 for the message boxes, and promotions, as pygame doesn't support multiple windows being open at the same time
 
 • Numpy for lists
  
