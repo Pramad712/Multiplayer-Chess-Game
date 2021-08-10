@@ -167,3 +167,6 @@ def get_piece(board_interpretation, square):
     piece = board_interpretation[7 - rank][file]
 
     return piece
+
+
+
