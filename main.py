@@ -163,6 +163,8 @@ while True:
             black_time -= time_gone
 
         start_time = time.time()
+        
+        # Not doing WN.fill(BLACK) and then calling chess_board because then legal_moves will show up, and then disappear. We want them to stay. 
         pygame.draw.rect(WN, BLACK, clear_time)
         draw_time_control(WN, int(white_time), int(black_time))
 
