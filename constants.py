@@ -1,5 +1,4 @@
 import pygame
-import os
 
 pygame.font.init()
 
@@ -44,25 +43,25 @@ clear_time = pygame.Rect((0, 0), (WIDTH, timer_height))
 
 # Images
 # White's Pieces
-white_pawn = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "white_pawn.png")), piece_size)
-white_knight = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "white_knight.png")), piece_size)
-white_bishop = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "white_bishop.png")), piece_size)
-white_rook = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "white_rook.png")), piece_size)
-white_queen = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "white_queen.png")), piece_size)
-white_king = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "white_king.png")), piece_size)
+white_pawn = pygame.transform.scale(pygame.image.load("white_pawn.png"), piece_size)
+white_knight = pygame.transform.scale(pygame.image.load("white_knight.png"), piece_size)
+white_bishop = pygame.transform.scale(pygame.image.load("white_bishop.png"), piece_size)
+white_rook = pygame.transform.scale(pygame.image.load("white_rook.png"), piece_size)
+white_queen = pygame.transform.scale(pygame.image.load("white_queen.png"), piece_size)
+white_king = pygame.transform.scale(pygame.image.load("white_king.png"), piece_size)
 
 # Black's Pieces
-black_pawn = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "black_pawn.png")), piece_size)
-black_knight = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "black_knight.png")), piece_size)
-black_bishop = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "black_bishop.png")), piece_size)
-black_rook = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "black_rook.png")), piece_size)
-black_queen = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "black_queen.png")), piece_size)
-black_king = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "black_king.png")), piece_size)
+black_pawn = pygame.transform.scale(pygame.image.load("black_pawn.png"), piece_size)
+black_knight = pygame.transform.scale(pygame.image.load("black_knight.png"), piece_size)
+black_bishop = pygame.transform.scale(pygame.image.load("black_bishop.png"), piece_size)
+black_rook = pygame.transform.scale(pygame.image.load("black_rook.png"), piece_size)
+black_queen = pygame.transform.scale(pygame.image.load("black_queen.png"), piece_size)
+black_king = pygame.transform.scale(pygame.image.load("black_king.png"), piece_size)
 
 # Button Images
-resign = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "resign.png")), (int(piece_size[0] * 3/4), int(piece_size[1] * 3/4)))
-take_back = pygame.transform.scale(pygame.image.load(os.path.join("C:/Chess", "take_back.png")), (int(piece_size[0] * 2/3), int(piece_size[1] * 2/3)))
+resign = pygame.transform.scale(pygame.image.load("resign.png"), (int(piece_size[0] * 3/4), int(piece_size[1] * 3/4)))
+take_back = pygame.transform.scale(pygame.image.load("take_back.png"), (int(piece_size[0] * 2/3), int(piece_size[1] * 2/3)))
 
 # Promotion Variables
-white_majors_directories = ["C:/Chess/white_queen.png", "C:/Chess/white_rook.png", "C:/Chess/white_bishop.png", "C:/Chess/white_knight.png"]
-black_majors_directories = ["C:/Chess/black_queen.png", "C:/Chess/black_rook.png", "C:/Chess/black_bishop.png", "C:/Chess/black_knight.png"]
+white_majors_directories = ["white_queen.png", "white_rook.png", "white_bishop.png", "white_knight.png"]
+black_majors_directories = ["black_queen.png", "black_rook.png", "black_bishop.png", "black_knight.png"]
