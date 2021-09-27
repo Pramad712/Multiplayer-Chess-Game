@@ -235,7 +235,6 @@ while True:
 
                             else:
                                 update = False
-                                moves.append(squares_pressed[count - 1] + "p" + square)
 
                         else:
                             capture = move_piece(board_interpretation, squares_pressed[count - 1], square, pieces, captured_pieces)
