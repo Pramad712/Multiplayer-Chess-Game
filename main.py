@@ -247,6 +247,7 @@ while True:
                             move_not_played = False
 
                         if capture:
+                            moves.pop()
                             moves.append(squares_pressed[count - 1] + "x" + square)
 
                     # Drawing Legal Moves
