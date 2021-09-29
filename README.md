@@ -1,6 +1,6 @@
 # Multiplayer Chess Program
  
-Two Player Game
+Two Player Chess Program
 
 # Dependencies
 • Chess Module 1.6.1 for finding legal moves, and win detection
