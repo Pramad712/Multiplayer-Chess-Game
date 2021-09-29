@@ -2,7 +2,7 @@
  
 Two Player Chess Program
 
-# Dependencies
+# Dependencies (the Program is in Python)
 • Chess Module 1.6.1 for finding legal moves, and win detection
 
 • Pygame 2.0.1 for the main program
