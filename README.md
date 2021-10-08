@@ -7,7 +7,7 @@ Two Player Chess Program
 
 • Pygame 2.0.1 for the main program
 
-• PyQt5 5.15.4 for the message boxes, and promotions, as pygame doesn't support multiple windows being open at the same yet (when I made the game).
+• PyQt5 5.15.4 for the message boxes, and promotions, as pygame doesn't support multiple windows being open at the same time yet (when I made the game).
 
 • Numpy 1.21.1 for lists
  
