@@ -167,15 +167,26 @@ while True:
         # Not doing WN.fill(BLACK) and then calling chess_board because then legal_moves will show up, and then disappear. We want them to stay. 
         pygame.draw.rect(WN, BLACK, clear_time)
         draw_time_control(WN, int(white_time), int(black_time))
-
+        
+        # Check for Timeout
         if turn == 1 and white_time <= 0:
             message = winner_message_box()
-            message.draw_message("WINNER!!",  "Timeout! BLACK WON!!")
+            text = "Timeout! BLACK WON!!"
+
+            if not player_cant_win("black", pieces):
+                text = "Draw by Insufficient Material vs Timeout! This is when a player runs out of time, but their opponent can't possibily win, so the game becomes a draw!"
+
+            message.draw_message("WINNER!!",  text)
             sys.exit()
 
         elif turn == 2 and black_time <= 0:
             message = winner_message_box()
-            message.draw_message("WINNER!!",  "Timeout! WHITE WON!!")
+            text = "Timeout! WHITE WON!!"
+
+            if player_cant_win("white", pieces):
+                text = "Draw by Insufficient Material vs Timeout! This is when a player runs out of time, but their opponent can't possibily win, so the game becomes a draw!"
+
+            message.draw_message("WINNER!!",  text)
             sys.exit()
 
         for event in pygame.event.get():
