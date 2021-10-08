@@ -168,5 +168,18 @@ def get_piece(board_interpretation, square):
 
     return piece
 
+def player_cant_win(player, pieces):
+    players_pieces = []
+
+    for piece in pieces:
+        if piece.color == player:
+            players_pieces.append(piece)
+
+    if len(players_pieces) == 1:
+        return False
+
+    else:
+        return True
+
 
 
