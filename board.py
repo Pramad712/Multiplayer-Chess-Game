@@ -44,9 +44,11 @@ def Chess_Board(WN, board_interpretation, pieces, white_time, black_time):
         WN.blit(piece.image, (piece.x, piece.y))
 
     # Lines
-    pygame.draw.line(WN, WHITE, (DIF_BOARD, (HEIGHT - option_height - DIF_BOARD)), (WIDTH, (HEIGHT - option_height - DIF_BOARD)), 1)
+    pygame.draw.line(WN, WHITE, (DIF_BOARD, timer_height), (WIDTH, timer_height), 1)
+    pygame.draw.line(WN, WHITE, (WIDTH - 1, timer_height), (WIDTH - 1, (HEIGHT - option_height - DIF_BOARD)), 1)
+    pygame.draw.line(WN, WHITE, (WIDTH, (HEIGHT - option_height - DIF_BOARD)), (DIF_BOARD, (HEIGHT - option_height - DIF_BOARD)), 1)
     pygame.draw.line(WN, WHITE, (DIF_BOARD, (HEIGHT - option_height - DIF_BOARD)), (DIF_BOARD, timer_height), 1)
-
+    
     # Buttons (resign, draw offer, and offer takeback)
     # Draw Offer Button
     # Rectangle
@@ -82,7 +84,7 @@ def Chess_Board(WN, board_interpretation, pieces, white_time, black_time):
     # Text
     text = "Take Back"
     text = take_back_font.render(text, 1, WHITE)
-    WN.blit(text, (take_back_button.x + take_back.get_width() + (take_back_button.width - take_back.get_width() - text.get_width())/2, take_back_button.y + take_back_button.height/2 - text.get_height()/2))
+    WN.blit(text, (take_back_button.x + take_back.get_width() + (take_back_button.width - take_back.get_width() - text.get_width())/2 - 1, take_back_button.y + take_back_button.height/2 - text.get_height()/2))
 
     draw_time_control(WN, white_time, black_time)
 
@@ -180,6 +182,4 @@ def player_cant_win(player, pieces):
 
     else:
         return True
-
-
 
