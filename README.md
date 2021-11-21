@@ -5,7 +5,7 @@ Two Player Chess Program
 # Dependencies (the Program is in Python)
 • Chess Module 1.6.1 for finding legal moves, and win detection
 
-• Pygame 2.0.1 for the main program
+• Pygame 2.0.2.dev4 for the main program
 
 • PyQt5 5.15.4 for the message boxes, and promotions, as pygame doesn't support multiple windows being open at the same time yet (when I made the game).
 
