@@ -5,9 +5,9 @@ pygame.font.init()
 # Screen, dimensions
 DIF_BOARD = 40 # The Difference of the bottum of the buttons, to the bottum of of the screen,
 # and the distance from the left of the board (where the white line is) to the left of the screen.
-WIDTH, HEIGHT = 560, 800
-option_width, option_height = WIDTH, 160
-button_width, button_height = 130, 50
+WIDTH, HEIGHT = 560, 750
+option_width, option_height = WIDTH, 110
+button_width, button_height = 150, 70
 timer_width, timer_height = WIDTH, 80
 rows = 8
 columns = 8
@@ -18,7 +18,7 @@ piece_size = (square_width, square_height)
 # Board
 Font = pygame.font.SysFont("comicsans", 36)
 resign_font = pygame.font.SysFont("comicsans", 27)
-take_back_font = pygame.font.SysFont("comicsans", 18)
+take_back_font = pygame.font.SysFont("comicsans", 21)
 ranks = ["1", "2", "3", "4", "5", "6", "7", "8"]
 files = ["a", "b", "c", "d", "e", "f", "g", "h"]
 color_square = (0, 0, 0)
