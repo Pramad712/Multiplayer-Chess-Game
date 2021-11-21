@@ -73,7 +73,6 @@ pygame.display.update()
 
 # Chess Board for Chess Module
 board = chess.Board()
-
 # Winner Message
 class winner_message_box:
     def __init__(self):
@@ -163,11 +162,11 @@ while True:
             black_time -= time_gone
 
         start_time = time.time()
-        
-        # Not doing WN.fill(BLACK) and then calling chess_board because then legal_moves will show up, and then disappear. We want them to stay. 
+
+        # Not calling chess_board, and doing WN.fill(BLACK) because then legal_moves will show up, and then be gone. We want them to stay.
         pygame.draw.rect(WN, BLACK, clear_time)
         draw_time_control(WN, int(white_time), int(black_time))
-        
+
         # Check for Timeout
         if turn == 1 and white_time <= 0:
             message = winner_message_box()
@@ -194,7 +193,7 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-            elif event.type == pygame.MOUSEBUTTONUP:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Find what was Clicked
                 mx, my = pygame.mouse.get_pos()
 
@@ -223,8 +222,7 @@ while True:
                                                                                squares_pressed[count - 1], square)
 
                         if castling:
-                            board_interpretation = move_castling(board_interpretation, squares_pressed[count - 1],
-                                                                 square)
+                            move_castling(board_interpretation, squares_pressed[count - 1], square)
 
                         elif en_passant:
                             move_en_passant(board_interpretation, pieces, captured_pieces, squares_pressed[count - 1], square)
@@ -258,8 +256,8 @@ while True:
                             move_not_played = False
 
                         if capture:
-                            moves.pop()
                             moves.append(squares_pressed[count - 1] + "x" + square)
+
 
                     # Drawing Legal Moves
                     elif piece != None:
@@ -329,11 +327,11 @@ while True:
                                     past_file_n = files.index(move[3])
                                     moved_rank_n = 7 - ranks.index(move[1])
                                     moved_file_n = files.index(move[0])
-
-                                    capture = move_piece(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
+                                    move_piece(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
                                     captured_piece = captured_pieces[len(captured_pieces) - 1]
                                     board_interpretation[past_rank_n][past_file_n] = captured_piece
                                     pieces.append(captured_piece)
+                                    undid_capture = True
 
                                 elif move[2] == "e":
                                     past_rank_n = 7 - ranks.index(move[4])
@@ -366,6 +364,7 @@ while True:
                                 WN.fill(BLACK)
                                 draw_button, resign_button, take_back_button = Chess_Board(WN, board_interpretation, pieces, int(white_time), int(black_time))
 
+
                         except:
                             pass
 
@@ -380,22 +379,8 @@ while True:
                 pygame.draw.rect(WN, BLACK, clear_time)
                 draw_time_control(WN, int(white_time), int(black_time))
 
-    if board.is_game_over():
-        if turn == 1:
-            message = winner_message_box()
-            message.draw_message("WINNER!", "Checkmate!! WHITE WON!!!")
-            sys.exit()
-
-
-        if turn == 2:
-            message = winner_message_box()
-            message.draw_message("WINNER!", "Checkmate!! BLACK WON!!!")
-            sys.exit()
-
-        sys.exit()
-
     # Checking for a win, and a draw by using the Chess Module
-    elif board.can_claim_threefold_repetition():
+    if board.can_claim_threefold_repetition():
         message = winner_message_box()
         message.draw_message("IT'S A TIE!", "Draw by threefold repetition! Threefold Repetition is when the same position has occurred 3 times in the game.")
         sys.exit()
@@ -415,6 +400,17 @@ while True:
         message.draw_message("IT'S A TIE!", "Draw by Insufficient Material! Insufficient Material is when it is not possible to checkmate for both sides with the amount of material they have.")
         sys.exit()
 
+    elif board.is_game_over():
+        if turn == 1:
+            message = winner_message_box()
+            message.draw_message("WINNER!", "Checkmate!! WHITE WON!!!")
+
+        if turn == 2:
+            message = winner_message_box()
+            message.draw_message("WINNER!", "Checkmate!! BLACK WON!!!")
+
+        sys.exit()
+
 
     legal_squares = []
 
@@ -425,7 +421,4 @@ while True:
         turn = 2
 
     color = colors[turn - 1]
-
-
-
 
