@@ -247,7 +247,9 @@ while True:
 
                         else:
                             capture = move_piece(board_interpretation, squares_pressed[count - 1], square, pieces, captured_pieces)
-                            moves.append(squares_pressed[count - 1] + " " + square)
+
+                            if not capture:
+                                moves.append(squares_pressed[count - 1] + " " + square)
 
                         if update:
                             update_board(board, squares_pressed[count - 1], square, piece.promotion_letter)
@@ -295,7 +297,7 @@ while True:
                             board.pop()
 
                             # Undo move for board_interpretation
-                            for i in range(2):
+                            for _ in range(2):
                                 move = moves[len(moves) - 1]
 
                                 if move[2:4] == "xp":
@@ -331,7 +333,6 @@ while True:
                                     captured_piece = captured_pieces[len(captured_pieces) - 1]
                                     board_interpretation[past_rank_n][past_file_n] = captured_piece
                                     pieces.append(captured_piece)
-                                    undid_capture = True
 
                                 elif move[2] == "e":
                                     past_rank_n = 7 - ranks.index(move[4])
@@ -378,6 +379,7 @@ while True:
 
                 pygame.draw.rect(WN, BLACK, clear_time)
                 draw_time_control(WN, int(white_time), int(black_time))
+                print(board, "\n")
 
     # Checking for a win, and a draw by using the Chess Module
     if board.can_claim_threefold_repetition():
