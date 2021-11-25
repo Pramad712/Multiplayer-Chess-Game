@@ -3,7 +3,7 @@ import pygame
 pygame.font.init()
 
 # Screen, dimensions
-DIF_BOARD = 40 # The Difference of the bottum of the buttons, to the bottum of of the screen,
+DIF_BOARD = 40 # The Difference of the bottom of the buttons, to the bottom of of the screen,
 # and the distance from the left of the board (where the white line is) to the left of the screen.
 WIDTH, HEIGHT = 560, 750
 option_width, option_height = WIDTH, 110
