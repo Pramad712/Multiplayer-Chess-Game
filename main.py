@@ -73,15 +73,16 @@ pygame.display.update()
 
 # Chess Board for Chess Module
 board = chess.Board()
+
 # Winner Message
 class winner_message_box:
-    def __init__(self):
+    def __init__(self) -> None:
         self.execute = True
 
-    def stop(self):
+    def stop(self) -> None:
         self.execute = False
 
-    def draw_message(self, title, text):
+    def draw_message(self, title: str, text: str) -> None:
         # Setup Message Box
         wn = QApplication(sys.argv)
         message_box = QMessageBox()
@@ -106,16 +107,11 @@ class button_message_box:
         self.execute = True
 
     # Button Messages
-    def button_pressed(self, button):
-        if button.text() == "&Yes":
-            self.button_clicked = "Yes"
-
-        elif button.text() == "&No":
-            self.button_clicked = "No"
-
+    def button_pressed(self, button: QPushButton):
+        self.button_clicked = button.text()
         self.execute = False
 
-    def draw_button_message(self, title, text):
+    def draw_button_message(self, title: str, text: str):
         # Setup Message Box
         wn = QApplication(sys.argv)
         message_box = QMessageBox()
@@ -143,23 +139,37 @@ class button_message_box:
 legal_squares = []
 squares_pressed = []
 moves = []
+time_s = [[900, 900]]
 color = "white"
-count = -1
 turn = 1
 start_time = time.time()
 
 while True:
     start_time = time.time()
+
+    take_back_made = False
+
     move_not_played = True
 
     while move_not_played:
+        if take_back_made:
+            white_time, black_time = time_s[-1]
+
         time_gone = time.time() - start_time
 
         if turn == 1:
             white_time -= time_gone
 
+            if white_time < 0:
+                white_time = 0
+
         elif turn == 2:
             black_time -= time_gone
+
+            if black_time < 0:
+                black_time = 0
+
+        take_back_made = False
 
         start_time = time.time()
 
@@ -172,8 +182,8 @@ while True:
             message = winner_message_box()
             text = "Timeout! BLACK WON!!"
 
-            if not player_cant_win("black", pieces):
-                text = "Draw by Insufficient Material vs Timeout! This is when a player runs out of time, but their opponent can't possibily win, so the game becomes a draw!"
+            if player_cant_win("black", pieces):
+                text = "Draw by Insufficient Material vs Timeout! This is when a player runs out of time, but their opponent can't possibly win, so the game becomes a draw!"
 
             message.draw_message("WINNER!!",  text)
             sys.exit()
@@ -183,7 +193,7 @@ while True:
             text = "Timeout! WHITE WON!!"
 
             if player_cant_win("white", pieces):
-                text = "Draw by Insufficient Material vs Timeout! This is when a player runs out of time, but their opponent can't possibily win, so the game becomes a draw!"
+                text = "Draw by Insufficient Material vs Timeout! This is when a player runs out of time, but their opponent can't possibly win, so the game becomes a draw!"
 
             message.draw_message("WINNER!!",  text)
             sys.exit()
@@ -195,50 +205,55 @@ while True:
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Find what was Clicked
-                mx, my = pygame.mouse.get_pos()
+                mx, my = event.pos
 
-                if mx >= DIF_BOARD and my > timer_height and my <= timer_height + HEIGHT - option_height - DIF_BOARD:
+                if mx > DIF_BOARD and my > timer_height and my < HEIGHT - option_height - DIF_BOARD:
                     WN.fill(BLACK)
                     draw_button, resign_button, take_back_button = Chess_Board(WN, board_interpretation, pieces, int(white_time), int(black_time))
                     # Finding piece, and square pressed
                     square = get_square(mx, my)
                     update = True
 
-                    squares_pressed.append(square)
                     file_n = files.index(square[0])
                     rank_n = ranks.index(square[1])
                     piece = board_interpretation[7 - rank_n][file_n]
 
-                    count += 1
+                    if piece != None or len(squares_pressed) > 1 and squares_pressed[-2] != None:
+                        squares_pressed.append(square)
+
+                    del squares_pressed[:-2] # Saving memory
 
                     # Capture/Moving Pieces
                     if square in legal_squares:
-                        # Weird letter definitions in each element of the moves list: e - en passant, p - promotion,
-                        # " " - nothing special, x - capture, and xp - promotion, and capture.
+
+                        # Weird letter definitions in each element of the moves list: e → en passant, p → promotion,
+                        # " " → nothing special, x → capture, and xp → promotion, and capture.
                         capture = False
 
-                        piece = get_piece(board_interpretation, squares_pressed[count - 1])
+                        piece = get_piece(board_interpretation, squares_pressed[0])
                         castling, en_passant, promotion = detect_special_moves(board_interpretation, piece,
-                                                                               squares_pressed[count - 1], square)
+                                                                               squares_pressed[0], square)
 
                         if castling:
-                            move_castling(board_interpretation, squares_pressed[count - 1], square)
+                            move_castling(board_interpretation, squares_pressed[0], square)
+                            moves.append(f"{squares_pressed[0]}c{square}")
 
                         elif en_passant:
-                            move_en_passant(board_interpretation, pieces, captured_pieces, squares_pressed[count - 1], square)
-                            moves.append(squares_pressed[count - 1] + "e" + square)
+                            move_en_passant(board_interpretation, pieces, captured_pieces, squares_pressed[0], square)
+                            moves.append(f"{squares_pressed[0]}e{square}")
 
                         elif promotion:
                             promotion = promotion_menu(piece)
                             promotion.draw_menu()
+
                             if promotion.promote:
-                                capture = move_piece(board_interpretation, squares_pressed[count - 1], square, pieces, captured_pieces)
+                                move_piece_normally(board_interpretation, squares_pressed[0], square, pieces, captured_pieces)
 
                                 if capture:
-                                    moves.append(squares_pressed[count - 1] + "xp" + square)
+                                    moves.append(f"{squares_pressed[0]}xp{square}")
 
                                 else:
-                                    moves.append(squares_pressed[count - 1] + "p" + square)
+                                    moves.append(f"{squares_pressed[0]}p{square}")
 
                                 capture = False
 
@@ -246,19 +261,19 @@ while True:
                                 update = False
 
                         else:
-                            capture = move_piece(board_interpretation, squares_pressed[count - 1], square, pieces, captured_pieces)
+                            capture = move_piece_normally(board_interpretation, squares_pressed[0], square, pieces, captured_pieces)
 
                             if not capture:
-                                moves.append(squares_pressed[count - 1] + " " + square)
+                                moves.append(squares_pressed[0] + " " + square)
 
                         if update:
-                            update_board(board, squares_pressed[count - 1], square, piece.promotion_letter)
+                            update_board(board, squares_pressed[0], square, piece.promotion_letter)
                             WN.fill(BLACK)
                             draw_button, resign_button, take_back_button = Chess_Board(WN, board_interpretation, pieces, int(white_time), int(black_time))
                             move_not_played = False
 
                         if capture:
-                            moves.append(squares_pressed[count - 1] + "x" + square)
+                            moves.append(squares_pressed[0] + "x" + square)
 
 
                     # Drawing Legal Moves
@@ -271,44 +286,41 @@ while True:
                         legal_squares = []
 
                 if mx >= draw_button.x and mx <= draw_button.x + button_width and my >= draw_button.y and my <= draw_button.y + button_height:
+                    time_when_button_pressed = time.time()
                     button_message = button_message_box()
-                    button_message.draw_button_message("Draw Offer?", color[0].upper() + color[1:] + " has offered a draw. Does " + colors[-1 * turn][0].upper() + colors[-1 * turn][1:] + " want to accept it?")
+                    button_message.draw_button_message("Draw Offer?", f"{color[0].upper() + color[1:]} has offered a draw. Does {colors[-1 * turn][0].upper() + colors[-1 * turn][1:]} want to accept it?")
 
-                    if button_message.button_clicked == "Yes":
+                    if button_message.button_clicked == "&Yes":
                         winner_message = winner_message_box()
                         winner_message.draw_message("ITS A TIE!", "Draw by Agreement!")
                         sys.exit()
 
                 elif mx >= resign_button.x and mx <= resign_button.x + button_width and my >= resign_button.y and my <= resign_button.y + button_height:
                     winner_message = winner_message_box()
-                    winner_message.draw_message("WINNER!!", "Resignation!! " + colors[-1 * turn].upper() + " WON!!")
+                    winner_message.draw_message("WINNER!!", f"Resignation!! {colors[-1 * turn].upper()} WON!!")
                     sys.exit()
 
                 elif mx >= take_back_button.x and mx <= take_back_button.x + button_width and my >= take_back_button.y and my <= take_back_button.y + button_height:
                     button_message = button_message_box()
-                    button_message.draw_button_message("Take Back Offer?", color[0].upper() + color[1:] + " has offered a take back. Is " + colors[-1 * turn][0].upper() + colors[-1 * turn][1:] + " nice enough to accept it?")
+                    button_message.draw_button_message("Take Back Offer?", f"{color[0].upper() + color[1:]} has offered a take back. Is { colors[-1 * turn][0].upper() + colors[-1 * turn][1:]} nice enough to accept it?")
 
-                    if button_message.button_clicked == "Yes":
+                    if button_message.button_clicked == "&Yes":
                         # The exception is if the current position is the original board.
                         # Used e, p, x, px, " " in the move list so it will be easier to detect if the move is a special move.
-                        try:
-                            # repeating things twice because doing it once will undo the previous turn, not move. 2 turns = 1 move.
-                            board.pop()
-                            board.pop()
-
-                            # Undo move for board_interpretation
-                            for _ in range(2):
-                                move = moves[len(moves) - 1]
+                        # repeating things twice because doing it once will only undo the previous turn. 2 turns = 1 move.
+                        # Undo move for board_interpretation
+                        for _ in range(2):
+                            try:
+                                move = moves[-1]
 
                                 if move[2:4] == "xp":
                                     # Names are reversed because it is undoing, not playing moves.
-                                    # Likewise, Original_square, and resulting square parameters for the move_piece() function
+                                    # Likewise, original_square, and resulting square parameters for the move_piece_normally() function
                                     # also look weird because the move is supposed to be reversed, so then it will undo, not play moves.
-                                    past_rank_n = 7 - ranks.index(move[5])
-                                    past_file_n = files.index(move[4])
-                                    moved_rank_n = 7 - ranks.index(move[1])
-                                    moved_file_n = files.index(move[0])
-
+                                    moved_rank_n = 7 - ranks.index(move[5])
+                                    moved_file_n = files.index(move[4])
+                                    past_rank_n = 7 - ranks.index(move[1])
+                                    past_file_n = files.index(move[0])
                                     piece = get_piece(board_interpretation, move[4:6])
                                     piece.type = "pawn"
                                     piece.promotion_letter = ""
@@ -319,30 +331,37 @@ while True:
                                     elif piece.color == "black":
                                         piece.image = black_pawn
 
-                                    capture = move_piece(board_interpretation, move[4:6], move[0:2], pieces, captured_pieces)
-                                    captured_piece = captured_pieces[len(captured_pieces) - 1]
-                                    board_interpretation[past_rank_n][past_file_n] = captured_piece
+                                    board_interpretation[past_rank_n][past_file_n] = board_interpretation[moved_rank_n][moved_file_n]
+                                    board_interpretation[moved_file_n][moved_file_n] = None
+                                    captured_piece = captured_pieces[-1]
+                                    captured_pieces.pop()
+                                    board_interpretation[moved_rank_n][moved_file_n] = captured_piece
                                     pieces.append(captured_piece)
 
                                 elif move[2] == "x":
-                                    past_rank_n = 7 - ranks.index(move[4])
-                                    past_file_n = files.index(move[3])
-                                    moved_rank_n = 7 - ranks.index(move[1])
-                                    moved_file_n = files.index(move[0])
-                                    move_piece(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
-                                    captured_piece = captured_pieces[len(captured_pieces) - 1]
-                                    board_interpretation[past_rank_n][past_file_n] = captured_piece
+                                    moved_rank_n = 7 - ranks.index(move[4])
+                                    moved_file_n = files.index(move[3])
+                                    past_rank_n = 7 - ranks.index(move[1])
+                                    past_file_n = files.index(move[0])
+
+                                    board_interpretation[past_rank_n][past_file_n] = board_interpretation[moved_rank_n][moved_file_n]
+                                    board_interpretation[moved_file_n][moved_file_n] = None
+                                    captured_piece = captured_pieces[-1]
+                                    captured_pieces.pop()
+                                    board_interpretation[moved_rank_n][moved_file_n] = captured_piece
                                     pieces.append(captured_piece)
 
                                 elif move[2] == "e":
-                                    past_rank_n = 7 - ranks.index(move[4])
-                                    past_file_n = files.index(move[3])
-                                    moved_rank_n = 7 - ranks.index(move[1])
-                                    moved_file_n = files.index(move[0])
+                                    moved_rank_n = 7 - ranks.index(move[4])
+                                    moved_file_n = files.index(move[3])
+                                    past_rank_n = 7 - ranks.index(move[1])
+                                    past_file_n = files.index(move[0])
 
-                                    capture = move_piece(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
-                                    captured_piece = captured_pieces[len(captured_pieces) - 1]
-                                    board_interpretation[past_rank_n + 1][past_file_n] = captured_piece
+                                    board_interpretation[past_rank_n][past_file_n] = board_interpretation[moved_rank_n][moved_file_n]
+                                    board_interpretation[moved_file_n][moved_file_n] = None
+                                    captured_piece = captured_pieces[-1]
+                                    captured_pieces.pop()
+                                    board_interpretation[moved_rank_n + 1][moved_file_n] = captured_piece
                                     pieces.append(captured_piece)
 
                                 elif move[2] == "p":
@@ -356,19 +375,49 @@ while True:
                                     elif piece.color == "black":
                                         piece.image = black_pawn
 
-                                    capture = move_piece(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
+                                    move_piece_normally(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
+
+                                elif move[2] == "c":
+                                    # Move the King
+                                    moved_rank_n = 7 - ranks.index(move[4])
+                                    moved_file_n = files.index(move[3])
+                                    past_rank_n = 7 - ranks.index(move[1])
+                                    past_file_n = files.index(move[0])
+
+                                    board_interpretation[past_rank_n][past_file_n] = board_interpretation[moved_rank_n][moved_file_n]
+                                    board_interpretation[moved_rank_n][moved_file_n] = None
+
+                                    # Move the Rook
+                                    if moved_file_n > past_file_n: # Kingside Castling
+                                        board_interpretation[moved_rank_n][7] = board_interpretation[moved_rank_n][5]
+                                        board_interpretation[moved_rank_n][5] = None
+
+                                    if moved_rank_n < past_file_n: # Queenside Castling
+                                        board_interpretation[moved_rank_n][0] = board_interpretation[moved_rank_n][3]
+                                        board_interpretation[moved_rank_n][3] = None
 
                                 elif move[2] == " ":
-                                    capture = move_piece(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
+                                    move_piece_normally(board_interpretation, move[3:5], move[0:2], pieces, captured_pieces)
 
                                 moves.pop()
                                 WN.fill(BLACK)
                                 draw_button, resign_button, take_back_button = Chess_Board(WN, board_interpretation, pieces, int(white_time), int(black_time))
 
+                            except Exception:
+                                pass
+
+                        try:
+                            board.pop()
+                            board.pop()
 
                         except:
                             pass
 
+                        if len(time_s) != 1:
+                            time_s.pop()
+                            time_s[-1][turn - 1] -= increment
+
+                        take_back_made = True
 
             if move_not_played == False:
                 if turn == 1:
@@ -379,7 +428,8 @@ while True:
 
                 pygame.draw.rect(WN, BLACK, clear_time)
                 draw_time_control(WN, int(white_time), int(black_time))
-                print(board, "\n")
+                time_s.append([white_time, black_time])
+                del time_s[:-2] # Saving memory
 
     # Checking for a win, and a draw by using the Chess Module
     if board.can_claim_threefold_repetition():
