@@ -17,7 +17,7 @@ You can play by clicking on a piece, and then it shows the legal moves for it. T
 # Known Issues
 • When ever a pop-up message is displayed, the main window (where the chess game is going on) will shrink, but it still has the same dimension in pixels! I think the reason is that I am using two modules for graphics (Pygame and PyQt5).
 
-• Very rarely, the legal moves are wrong. If you click on the "invalid move circles," it will give an error (I've only seen it twice).
+• Very rarely, the legal moves are wrong. If you click on the "invalid move circles," it will give an error (I've only seen it occur twice). This is due to the chess module.
 
 # Enjoy!
 
