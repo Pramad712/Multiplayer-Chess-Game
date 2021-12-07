@@ -20,4 +20,4 @@ You can play by clicking on a piece, and then it shows the legal moves for it. T
 • Very rarely, the legal moves are wrong. If you click on the "invalid move circles," it will give an error (I've only seen it occur twice). This is due to the chess module.
 
 # Enjoy!
-
+https://github.com/Pramad712/Multiplayer-Chess-Game/releases/tag/v1.0
