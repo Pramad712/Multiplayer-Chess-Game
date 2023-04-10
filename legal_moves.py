@@ -18,7 +18,6 @@ def draw_legal_moves(WN: pygame.Surface, square: str, color: str, board: chess.B
             squares.append(legal_square)
 
     for square in squares:
-        print(square, end=" ")
         x = DIF_BOARD + (files.index(square[0]) + 0.5) * square_width
         y = (8 - ranks.index(square[1]) - 0.5) * square_height + timer_height
         pygame.draw.circle(WN, CYAN, (x, y), ((square_width + square_height)/6))
