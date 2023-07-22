@@ -1,6 +1,8 @@
 # Multiplayer Chess Program
 
 # Dependencies 
+Note: Latest versions at the time of creation
+
 • Python 3.9.5
 
 • Chess Module 1.6.1 for finding legal moves, and win detection
