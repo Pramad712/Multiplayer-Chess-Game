@@ -25,3 +25,5 @@ You can play by clicking on a piece, and then it shows the legal moves for it. T
 
 # Enjoy!
 https://github.com/Pramad712/Multiplayer-Chess-Game/releases/tag/v1.0
+
+Note: Images are from ChessKid. They looked funny and unique (kinda cringe though ...) so why not give it a try?
